@@ -1,10 +1,10 @@
 import tcod as libtcod
 from random import randint
 
-from components.ai import BasicMonster
-from components.equipment import EquipmentSlots
-from components.equippable import Equippable
-from components.fighter import Fighter
+from ai import BasicMonster
+from equipment import EquipmentSlots
+from equippable import Equippable
+from fighter import Fighter
 from components.item import Item
 from components.stairs import Stairs
 from entity import Entity

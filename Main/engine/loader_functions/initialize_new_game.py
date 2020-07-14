@@ -2,7 +2,7 @@ import tcod as libtcod
 
 from components.equipment import Equipment
 from components.equippable import Equippable
-from components.fighter import Fighter
+from components.fighters.player import Player
 from components.inventory import Inventory
 from components.level import Level
 from entity import Entity
@@ -75,7 +75,7 @@ def get_constants():
 
 
 def get_game_variables(constants):
-    fighter_component = Fighter(hp=100, max_hp=100, defense=1, power=2)
+    fighter_component = Player(hp=100, max_hp=100, defense=1, power=2, max_stamina=100, stamina=100)
     inventory_component = Inventory(26)
     level_component = Level()
     equipment_component = Equipment()

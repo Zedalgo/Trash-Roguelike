@@ -53,10 +53,10 @@ class Entity:
         self.y += dy
 
     # Move an entity by a given amount if destination isn't occupied.
-    def move_check_walls(self, dx, dy, game_map):
+    def move_check_walls(self, dx, dy, game_map, entities):
         new_x = self.x + dx
         new_y = self.y + dy
-        if game_map.is_blocked(new_x, new_y):
+        if game_map.is_blocked(new_x, new_y) or get_blocking_entities_at_location(entities, new_x, new_y):
             return
         else:
             self.x = new_x

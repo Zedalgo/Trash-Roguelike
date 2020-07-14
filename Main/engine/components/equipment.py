@@ -50,6 +50,18 @@ class Equipment:
 
         return bonus
 
+    @property
+    def max_stamina_bonus(self):
+        bonus = 0
+
+        if self.main_hand and self.main_hand.equippable:
+            bonus += self.main_hand.equippable.max_stamina_bonus
+
+        if self.off_hand and self.off_hand.equippable:
+            bonus += self.off_hand.equippable.max_stamina_bonus
+
+        return bonus
+
     def toggle_equip(self, equippable_entity):
         results = []
 

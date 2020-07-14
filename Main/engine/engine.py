@@ -6,7 +6,7 @@ from fov_functions import initialize_fov, recompute_fov
 from game_messages import Message
 from game_states import GameStates
 from input_handlers import handle_keys, handle_mouse, handle_main_menu
-from loader_functions.initialize_new_game import get_constants, get_game_variables
+from loader_functions.initialize_new_game import *
 from loader_functions.data_loaders import load_game, save_game
 from menus import main_menu, message_box
 from render_functions import clear_all, render_all
@@ -75,6 +75,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
                     player_turn_results.extend(attack_results)
                 else:
                     player.move(dx, dy)
+                    player.fighter.restore_stamina(3)
 
                     fov_recompute = True
 

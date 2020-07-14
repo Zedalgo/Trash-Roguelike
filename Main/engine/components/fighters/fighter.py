@@ -1,10 +1,12 @@
 import tcod as libtcod
 
 from game_messages import Message
+from fighter_types import FighterTypes
 
 
 class Fighter:
     def __init__(self, max_hp, hp, defense, power, xp=0):
+        self.unit_type = FighterTypes.FIGHTER
         self.base_max_hp = max_hp
         self.hp = hp
         self.base_defense = defense
