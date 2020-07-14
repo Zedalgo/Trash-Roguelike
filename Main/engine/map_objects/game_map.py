@@ -9,7 +9,7 @@ from components.item import Item
 from components.stairs import Stairs
 from entity import Entity
 from game_messages import Message
-from item_functions import heal, cast_lightning, cast_fireball, cast_confuse, cast_force
+from item_functions import heal, cast_lightning, cast_fireball, cast_confuse, cast_force, heal_stamina
 from render_functions import RenderOrder
 from map_objects.rectangle import Rect
 from map_objects.tile import Tile
@@ -119,7 +119,8 @@ class GameMap:
         }
 
         item_chances = {
-            'healing_potion': 35,
+            'healing_potion': 40,
+            'stamina_potion': 20,
             'sword': from_dungeon_level([[5, 4]], self.dungeon_level),
             'shield': from_dungeon_level([[15, 8]], self.dungeon_level),
             'lightning_scroll': from_dungeon_level([[25, 4]], self.dungeon_level),
@@ -162,6 +163,10 @@ class GameMap:
                     item_component = Item(use_function=heal, amount=40)
                     item = Entity(x, y, '!', libtcod.light_red, 'Healing Potion', render_order=RenderOrder.ITEM,
                                   item=item_component)
+                elif item_choice == 'stamina_potion':
+                    item_component = Item(use_function=heal_stamina, amount=80)
+                    item = Entity(x, y, '!', libtcod.light_orange, 'Stamina Potion', render_order=RenderOrder.ITEM,
+                                   item=item_component)
                 elif item_choice == 'sword':
                     equippable_component = Equippable(EquipmentSlots.MAIN_HAND, power_bonus=3)
                     item = Entity(x, y, '/', libtcod.sky, 'Sword', equippable=equippable_component)

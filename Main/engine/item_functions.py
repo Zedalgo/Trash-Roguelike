@@ -21,6 +21,26 @@ def heal(*args, **kwargs):
     return results
 
 
+def heal_stamina(*args, **kwargs):
+    entity = args[0]
+    amount = kwargs.get('amount')
+
+    results = []
+
+    if entity.fighter.unit_type == FighterTypes.PLAYER:
+        if entity.fighter.stamina == entity.fighter.max_stamina:
+            results.append({'consumed': False, 'message': Message('You are already at full stamina', libtcod.yellow)})
+        else:
+            entity.fighter.restore_stamina(amount)
+            results.append({'consumed': True, 'message': Message('You feel energetic!', libtcod.green)})
+    else:
+        results.append({'consumed': False,
+                        'message': Message('The {0} attempts to open a bottle and fails.'.format(entity.name),
+                                           libtcod.white)})
+
+    return results
+
+
 def cast_lightning(*args, **kwargs):
     caster = args[0]
     entities = kwargs.get('entities')
