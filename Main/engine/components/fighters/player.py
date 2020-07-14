@@ -44,7 +44,7 @@ class Player(Fighter):
                 results.append({'message': Message('{0} attacks {1} but does no damage.'.format(
                     self.owner.name.capitalize(), target.name), libtcod.white)})
         else:
-            results.append({'message': Message('{0} attempts to attack, but lacks the stamina to do so.'.format(
-                    self.owner.name.capitalize(), target.name), libtcod.white)})
+            results.append({'message': Message('You attempt to attack, but lack the stamina to do so.'.format(
+                    self.owner.name.capitalize(), target.name), libtcod.red)})
 
         return results

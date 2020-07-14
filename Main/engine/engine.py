@@ -76,13 +76,13 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
                 else:
                     player.move(dx, dy)
                     player.fighter.restore_stamina(5)
-
                     fov_recompute = True
 
                 game_state = GameStates.ENEMY_TURN
 
         elif wait:
             game_state = GameStates.ENEMY_TURN
+            player.fighter.restore_stamina(5)
 
         elif pickup and game_state == GameStates.PLAYERS_TURN:
             for entity in entities:
@@ -114,6 +114,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
         if take_stairs and game_state == GameStates.PLAYERS_TURN:
             for entity in entities:
                 if entity.stairs and entity.x == player.x and entity.y == player.y:
+                    player.fighter.restore_stamina(player.fighter.max_stamina)
                     entities = game_map.next_floor(player, message_log, constants)
                     fov_map = initialize_fov(game_map)
                     fov_recompute = True
