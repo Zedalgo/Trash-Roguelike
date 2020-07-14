@@ -3,6 +3,11 @@
 * Corpse %
 * Dagger -
 * Potion !
+	* Healing
 * Scroll #
+	* Fireball
+	* Lightning
+	* Confuse
+	* Force
 * Shield [
 * Sword /
