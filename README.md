@@ -1,2 +1,8 @@
-# Trash-Roguelike
-I am testing the readme stuff, plz work
+# Scroll of Symbol Guidance
+
+* Corpse %
+* Dagger -
+* Potion !
+* Scroll #
+* Shield [
+* Sword /
