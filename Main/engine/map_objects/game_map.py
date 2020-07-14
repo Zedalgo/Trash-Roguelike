@@ -9,7 +9,7 @@ from components.item import Item
 from components.stairs import Stairs
 from entity import Entity
 from game_messages import Message
-from item_functions import heal, cast_lightning, cast_fireball, cast_confuse
+from item_functions import heal, cast_lightning, cast_fireball, cast_confuse, cast_force
 from render_functions import RenderOrder
 from map_objects.rectangle import Rect
 from map_objects.tile import Tile
@@ -124,7 +124,8 @@ class GameMap:
             'shield': from_dungeon_level([[15, 8]], self.dungeon_level),
             'lightning_scroll': from_dungeon_level([[25, 4]], self.dungeon_level),
             'fireball_scroll': from_dungeon_level([[25, 6]], self.dungeon_level),
-            'confusion_scroll': from_dungeon_level([[10, 2]], self.dungeon_level)
+            'confusion_scroll': from_dungeon_level([[10, 2]], self.dungeon_level),
+            'force_scroll': from_dungeon_level([[10, 3]], self.dungeon_level),
         }
 
         for i in range(number_of_monsters):
@@ -177,6 +178,10 @@ class GameMap:
                     item_component = Item(use_function=cast_confuse, targeting=True, targeting_message=Message(
                         'Left-click an enemy to confuse it, or right-click to cancel.', libtcod.light_cyan))
                     item = Entity(x, y, '#', libtcod.light_pink, 'Confusion Scroll', render_order=RenderOrder.ITEM,
+                                  item=item_component)
+                elif item_choice == 'force_scroll':
+                    item_component = Item(use_function=cast_force, distance=3, damage=3)
+                    item = Entity(x, y, '#', libtcod.light_violet, 'Force Scroll', render_order=RenderOrder.ITEM,
                                   item=item_component)
                 else:
                     item_component = Item(use_function=cast_lightning, damage=40, maximum_range=5)

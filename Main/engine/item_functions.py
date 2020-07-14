@@ -1,4 +1,5 @@
 import tcod as libtcod
+import math
 
 from game_messages import Message
 from components.ai import ConfusedMonster
@@ -17,6 +18,7 @@ def heal(*args, **kwargs):
         results.append({'consumed': True, 'message': Message('Your wounds start to feel better!', libtcod.green)})
 
     return results
+
 
 def cast_lightning(*args, **kwargs):
     caster = args[0]
@@ -39,12 +41,15 @@ def cast_lightning(*args, **kwargs):
                 closest_distance = distance
 
     if target:
-        results.append({'consumed': True, 'target': target, 'message': Message('A lighting bolt strikes the {0} with a loud thunder! The damage is {1}'.format(target.name, damage))})
+        results.append({'consumed': True, 'target': target, 'message': Message(
+            'A lighting bolt strikes the {0} with a loud thunder! The damage is {1}'.format(target.name, damage))})
         results.extend(target.fighter.take_damage(damage))
     else:
-        results.append({'consumed': False, 'target': None, 'message': Message('No enemy is close enough to strike.', libtcod.red)})
+        results.append(
+            {'consumed': False, 'target': None, 'message': Message('No enemy is close enough to strike.', libtcod.red)})
 
     return results
+
 
 def cast_fireball(*args, **kwargs):
     entities = kwargs.get('entities')
@@ -57,17 +62,22 @@ def cast_fireball(*args, **kwargs):
     results = []
 
     if not libtcod.map_is_in_fov(fov_map, target_x, target_y):
-        results.append({'consumed': False, 'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
+        results.append({'consumed': False,
+                        'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
         return results
 
-    results.append({'consumed': True, 'message': Message('The fireball explodes, burning everything within {0} tiles!'.format(radius), libtcod.orange)})
+    results.append({'consumed': True,
+                    'message': Message('The fireball explodes, burning everything within {0} tiles!'.format(radius),
+                                       libtcod.orange)})
 
     for entity in entities:
         if entity.distance(target_x, target_y) <= radius and entity.fighter:
-            results.append({'message': Message('The {0} gets burned for {1} hit points.'.format(entity.name, damage), libtcod.orange)})
+            results.append({'message': Message('The {0} gets burned for {1} hit points.'.format(entity.name, damage),
+                                               libtcod.orange)})
             results.extend(entity.fighter.take_damage(damage))
 
     return results
+
 
 def cast_confuse(*args, **kwargs):
     entities = kwargs.get('entities')
@@ -78,7 +88,8 @@ def cast_confuse(*args, **kwargs):
     results = []
 
     if not libtcod.map_is_in_fov(fov_map, target_x, target_y):
-        results.append({'consumed': False, 'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
+        results.append({'consumed': False,
+                        'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
         return results
 
     for entity in entities:
@@ -88,10 +99,51 @@ def cast_confuse(*args, **kwargs):
             confused_ai.owner = entity
             entity.ai = confused_ai
 
-            results.append({'consumed': True, 'message': Message('The eyes of the {0} look vacant, as he starts to stumble around!'.format(entity.name), libtcod.light_green)})
+            results.append({'consumed': True, 'message': Message(
+                'The eyes of the {0} look vacant, as he starts to stumble around!'.format(entity.name),
+                libtcod.light_green)})
 
             break
     else:
-        results.append({'consumed': False, 'message': Message('There is no targetable enemy at that location.', libtcod.yellow)})
+        results.append(
+            {'consumed': False, 'message': Message('There is no targetable enemy at that location.', libtcod.yellow)})
+
+    return results
+
+
+def cast_force(*args, **kwargs):
+    caster = args[0]
+    game_map = kwargs.get('game_map')
+    entities = kwargs.get('entities')
+    distance = kwargs.get('distance')  # Distance enemies get sent flying.
+    damage = kwargs.get('damage')  # Damage dealt for each tile remaining.
+    target = False  # If any target was hit.
+
+    results = []
+
+    for entity in entities:
+        if entity.distance_to(caster) <= math.sqrt(2) and caster != entity:  # Only hit targets adjacent to caster.
+            target = True
+            results.append(
+                {'consumed': True, 'message': Message('The {0} gets sent flying.'.format(entity.name), libtcod.orange)})
+            move_x = entity.x - caster.x
+            move_y = entity.y - caster.y
+            for i in range(distance):
+                prev_x = entity.x
+                prev_y = entity.y
+                entity.move_check_walls(move_x, move_y, game_map)
+                # Deal wallbang damage if position was blocked.
+                if entity.fighter and prev_x == entity.x and prev_y == entity.y:
+                    wallbang_damage = damage * (distance - i)
+                    entity.fighter.take_damage(wallbang_damage)
+                    results.append(
+                        {'message': Message(
+                            'The {0} slams into a wall and takes {1} damage.'.format(entity.name, wallbang_damage),
+                            libtcod.orange)})
+                    results.extend(entity.fighter.take_damage(wallbang_damage))
+                    break  # Stop trying to move entity into walls after a wallbang.
+
+    if not target:
+        results.append({'consumed': False, 'message': Message('Nothing is close enough to be affected.', libtcod.red)})
 
     return results

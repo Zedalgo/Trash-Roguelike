@@ -54,7 +54,8 @@ class Inventory:
         return results
 
     def remove_item(self, item):
-        self.items.remove(item)
+        if self.items.count(item) > 0:
+            self.items.remove(item)
 
     def drop_item(self, item):
         results = []

@@ -106,7 +106,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
             item = player.inventory.items[inventory_index]
 
             if game_state == GameStates.SHOW_INVENTORY:
-                player_turn_results.extend(player.inventory.use(item, entities=entities, fov_map=fov_map))
+                player_turn_results.extend(player.inventory.use(item, entities=entities, fov_map=fov_map, game_map=game_map))
             elif game_state == GameStates.DROP_INVENTORY:
                 player_turn_results.extend(player.inventory.drop_item(item))
 
