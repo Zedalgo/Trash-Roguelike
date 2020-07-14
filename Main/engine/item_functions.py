@@ -33,7 +33,7 @@ def cast_lightning(*args, **kwargs):
 
     closest_distance = maximum_range + 1
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
@@ -73,7 +73,7 @@ def cast_fireball(*args, **kwargs):
                         'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
         return results
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
@@ -105,7 +105,7 @@ def cast_confuse(*args, **kwargs):
                         'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
         return results
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
@@ -139,7 +139,7 @@ def cast_force(*args, **kwargs):
 
     results = []
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
