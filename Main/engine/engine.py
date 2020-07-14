@@ -75,7 +75,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
                     player_turn_results.extend(attack_results)
                 else:
                     player.move(dx, dy)
-                    player.fighter.restore_stamina(3)
+                    player.fighter.restore_stamina(5)
 
                     fov_recompute = True
 
