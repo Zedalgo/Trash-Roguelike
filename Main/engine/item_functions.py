@@ -21,6 +21,26 @@ def heal(*args, **kwargs):
     return results
 
 
+def heal_stamina(*args, **kwargs):
+    entity = args[0]
+    amount = kwargs.get('amount')
+
+    results = []
+
+    if entity.fighter.unit_type == FighterTypes.PLAYER:
+        if entity.fighter.stamina == entity.fighter.max_stamina:
+            results.append({'consumed': False, 'message': Message('You are already at full stamina', libtcod.yellow)})
+        else:
+            entity.fighter.restore_stamina(amount)
+            results.append({'consumed': True, 'message': Message('You feel energetic!', libtcod.green)})
+    else:
+        results.append({'consumed': False,
+                        'message': Message('The {0} attempts to open a bottle and fails.'.format(entity.name),
+                                           libtcod.white)})
+
+    return results
+
+
 def cast_lightning(*args, **kwargs):
     caster = args[0]
     entities = kwargs.get('entities')
@@ -33,7 +53,7 @@ def cast_lightning(*args, **kwargs):
 
     closest_distance = maximum_range + 1
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
@@ -73,7 +93,7 @@ def cast_fireball(*args, **kwargs):
                         'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
         return results
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
@@ -105,7 +125,7 @@ def cast_confuse(*args, **kwargs):
                         'message': Message('You cannot target a tile outside your field of view.', libtcod.yellow)})
         return results
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
@@ -139,7 +159,7 @@ def cast_force(*args, **kwargs):
 
     results = []
 
-    if caster.fighter.unit_type != FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
+    if caster.fighter.unit_type == FighterTypes.PLAYER and not caster.fighter.consume_stamina(15):
         results.append({'consumed': False,
                         'message': Message('You lack the stamina to cast spells.', libtcod.yellow)})
         return results
